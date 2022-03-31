@@ -9,6 +9,8 @@ namespace VerduleriaWeb.Controllers
         // GET: ClienteController
         public ActionResult Index()
         {
+            //comentario
+
             var cliente1 = new Cliente { Id = 1, Nombre = "Gaston", Telefono = "1234" };
             var cliente2 = new Cliente { Id = 2, Nombre = "JuanPablo", Telefono = "1234" };
             var lista = new List<Cliente>();
