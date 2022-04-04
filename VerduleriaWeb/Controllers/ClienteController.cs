@@ -1,21 +1,30 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using VerduleriaWeb.Entidades;
+using VerduleriaWeb.EntityFramework;
 
 namespace VerduleriaWeb.Controllers
 {
     public class ClienteController : Controller
     {
+        private ApplicationDbContext dbContext;
+        public ClienteController(ApplicationDbContext applicationDbContext)
+        {
+            dbContext = applicationDbContext;
+        }
         // GET: ClienteController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             //comentario
-
+            /*
             var cliente1 = new Cliente { Id = 1, Nombre = "Gaston", Telefono = "1234" };
             var cliente2 = new Cliente { Id = 2, Nombre = "JuanPablo", Telefono = "1234" };
             var lista = new List<Cliente>();
             lista.Add(cliente1);
             lista.Add(cliente2);
+            */
+            var lista = await  dbContext.Clientes.ToListAsync();
             return View(lista);
         }
 
@@ -34,13 +43,15 @@ namespace VerduleriaWeb.Controllers
         // POST: ClienteController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(Cliente cliente)
         {
             try
             {
+                dbContext.Add(cliente);
+                await dbContext.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception ex)
             {
                 return View();
             }
